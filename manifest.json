@@ -1,0 +1,34 @@
+{
+    "name": "Course Analyzer",
+    "description": "Analyze info between bestchange, binance and other financial platforms.",
+    "version": "1.1",
+    "manifest_version": 3,
+    "background": {
+        "service_worker": "background.js"
+    },
+    "permissions": [
+        "storage", 
+        "activeTab", 
+        "scripting", 
+        "alarms", 
+        "tabs"],
+    "host_permissions":[
+        "https://www.bestchange.ru/",
+        "https://www.bestchange.com/"
+    ],    
+    "action":{
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "/images/diagram-16.png",
+            "32": "/images/diagram-32.png",
+            "64": "/images/diagram-64.png",
+            "128": "/images/diagram-128.png"
+        }
+    },
+    "icons": {
+        "16": "/images/diagram-16.png",
+        "32": "/images/diagram-32.png",
+        "64": "/images/diagram-64.png",
+        "128": "/images/diagram-128.png"
+    }
+}

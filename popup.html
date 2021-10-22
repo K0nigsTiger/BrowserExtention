@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <div>
+            <label for="BinanceUpdate" class="InfText">Частота обновления курсов Binance (мин)</label>
+            <input type="number" id="BinanceUpdate" />
+        </div>
+        <div>
+            <label for="CbrUpdate" class="InfText">Частота обновления курсов ЦБ (мин)</label>
+            <input type="number" id="CbrUpdate" />
+            <input type="button" value="Сохранить" id="saveUpdateValues"/>
+        </div>
+        <hr>
+        <div>
+            <span class="InfText">Дата последнего обновления курсов</span><br>
+            <span class="InfStatus">Binance: </span><span id="BinTime"></span><br>
+            <span class="InfStatus">ЦБ: </span><span id="CbrTime"></span> 
+        </div>
+        <div>
+            <span id="AppStatus" class="InfStatus"></span>
+        </div>
+        <button id="RunEx">Start</button>
+        <button id="StopEx">Stop</button>
+        <script src="popup.js"></script>
+    </body>
+</html>
