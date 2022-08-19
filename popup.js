@@ -1,52 +1,29 @@
-function getSettings(){
-    chrome.storage.sync.get("BinUpdateInterval", ({ BinUpdateInterval }) => {
-        document.getElementById('BinanceUpdate').value = BinUpdateInterval;
-    });
-    chrome.storage.sync.get("CbrUpdateInterval", ({ CbrUpdateInterval }) => {
-        document.getElementById('CbrUpdate').value = CbrUpdateInterval;
-    });
-    chrome.storage.sync.get("BinUpdateTime", ({ BinUpdateTime }) => {
-        document.getElementById('BinTime').innerText = BinUpdateTime;
-    });
-    chrome.storage.sync.get("CBRUpdateTime", ({ CBRUpdateTime }) => {
-        document.getElementById('CbrTime').innerText = CBRUpdateTime;
-    });
-    chrome.storage.sync.get("ApplicationStatus", ({ ApplicationStatus }) => {
-        if(ApplicationStatus == "Start"){
-            document.getElementById('AppStatus').innerText = "Расширение Активно";
-        }
-        else{
-            document.getElementById('AppStatus').innerText = "Расширение Остановлено";
-        }   
-    });
-};
-
-document.getElementById("RunEx").addEventListener("click", function(){ 
-    chrome.runtime.sendMessage("Start", function(response){
-        chrome.storage.sync.set({ ApplicationStatus: "Start" });
-        console.log(response);
-        getSettings();
-    });
-});
-
-document.getElementById("StopEx").addEventListener("click", function(){
-    chrome.runtime.sendMessage("Stop", function(response){
-        chrome.storage.sync.set({ ApplicationStatus: "Stop" });
-        console.log(response);
-        getSettings();
+'use strict'
+const settingsData = () => chrome.storage.sync.get(['BinUpdateInterval', 'CbrUpdateInterval', 'ApplicationStatus', 'CBRUpdateTime', 'BinUpdateTime'], (items) => getSettings(items)) // get app settings from chrome storage
+function getSettings(items){ 
+    Object.keys(items).forEach(key => {
+        console.log(items[key])   
+        key !== "ApplicationStatus"
+            ? document.getElementById(key).value = items[key]
+            : document.getElementById(key).innerText = getStatus(items[key])               
+    })
+    function getStatus(data){
+        if(data === "Start") return "Расширение Активно"  
+        return "Расширение Остановлено"
+    }
+}
+function messageStartStop(message){ // Send message to Listener in background.js
+    chrome.runtime.sendMessage(message, () => {
+        chrome.storage.sync.set({ ApplicationStatus: message }); // Save application status
+        settingsData();
     });   
+}
+document.getElementById("Start").addEventListener("click", () => messageStartStop("Start"))
+document.getElementById("Stop").addEventListener("click", () => messageStartStop("Stop"))
+document.getElementById("saveUpdateValues").addEventListener("click", function(){ 
+    const getNumber = (numberInputId) => parseFloat(document.getElementById(numberInputId).value) //convert to Float by input Id
+    let intervalsObj = {binance: getNumber("BinUpdateInterval"), centralBank: getNumber("CbrUpdateInterval")} // Save floats in object
+    chrome.storage.sync.set({ BinUpdateInterval: intervalsObj.binance, CbrUpdateInterval: intervalsObj.centralBank })
+    messageStartStop("Stop")
 });
-
-document.getElementById("saveUpdateValues").addEventListener("click", function(){
-    let bin = parseFloat(document.getElementById("BinanceUpdate").value.replace(",", "."));
-    let cbr = parseFloat(document.getElementById("CbrUpdate").value.replace(",", "."));
-    chrome.storage.sync.set({ BinUpdateInterval: bin });
-    chrome.storage.sync.set({ CbrUpdateInterval: cbr });
-    chrome.runtime.sendMessage("Stop", function(response){
-        chrome.storage.sync.set({ ApplicationStatus: "Stop" });
-        console.log(response);
-        getSettings();
-    }); 
-});
-
-getSettings();
+settingsData();

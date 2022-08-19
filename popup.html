@@ -6,25 +6,26 @@
     </head>
     <body>
         <div>
-            <label for="BinanceUpdate" class="InfText">Частота обновления курсов Binance (мин)</label>
-            <input type="number" id="BinanceUpdate" />
+            <label for="BinUpdateInterval" class="InfText">Частота обновления курсов Binance (мин)</label>
+            <input type="number" id="BinUpdateInterval" />
         </div>
         <div>
-            <label for="CbrUpdate" class="InfText">Частота обновления курсов ЦБ (мин)</label>
-            <input type="number" id="CbrUpdate" />
+            <label for="CbrUpdateInterval" class="InfText">Частота обновления курсов ЦБ (мин)</label>
+            <input type="number" id="CbrUpdateInterval" />
             <input type="button" value="Сохранить" id="saveUpdateValues"/>
         </div>
         <hr>
         <div>
             <span class="InfText">Дата последнего обновления курсов</span><br>
-            <span class="InfStatus">Binance: </span><span id="BinTime"></span><br>
-            <span class="InfStatus">ЦБ: </span><span id="CbrTime"></span> 
+            <span class="InfStatus">Binance: </span><span id="BinUpdateTime"></span><br>
+            <span class="InfStatus">ЦБ: </span><span id="CBRUpdateTime"></span> 
         </div>
         <div>
-            <span id="AppStatus" class="InfStatus"></span>
+            <span id="ApplicationStatus" class="InfStatus"></span>
+            <span id="Log"></span>
         </div>
-        <button id="RunEx">Start</button>
-        <button id="StopEx">Stop</button>
+        <button id="Start">Start</button>
+        <button id="Stop">Stop</button>
         <script src="popup.js"></script>
     </body>
 </html>
