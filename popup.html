@@ -5,27 +5,29 @@
         <meta charset="utf-8">
     </head>
     <body>
+        <div style="font-size:15px; margin-bottom: 10px;">Частота обновления курсов</div>
         <div>
-            <label for="BinUpdateInterval" class="InfText">Частота обновления курсов Binance (мин)</label>
-            <input type="number" id="BinUpdateInterval" />
+            <label for="BinUpdateInterval" class="InfText">Binance</label>
+            <input type="number" id="BinUpdateInterval" placeholder="Minutes"/>
         </div>
         <div>
-            <label for="CbrUpdateInterval" class="InfText">Частота обновления курсов ЦБ (мин)</label>
-            <input type="number" id="CbrUpdateInterval" />
-            <input type="button" value="Сохранить" id="saveUpdateValues"/>
+            <label for="CbrUpdateInterval" class="InfText">ЦБ</label>
+            <input type="number" id="CbrUpdateInterval" placeholder="Minutes" />
         </div>
-        <hr>
+        <div style="text-align:center;">
+            <input type="button" value="Save" id="saveUpdateValues"/>
+        </div>
         <div>
-            <span class="InfText">Дата последнего обновления курсов</span><br>
+            <span class="InfText">Последнее обновление</span><br>
             <span class="InfStatus">Binance: </span><span id="BinUpdateTime"></span><br>
             <span class="InfStatus">ЦБ: </span><span id="CBRUpdateTime"></span> 
         </div>
-        <div>
-            <span id="ApplicationStatus" class="InfStatus"></span>
+        <div>           
             <span id="Log"></span>
         </div>
         <button id="Start">Start</button>
         <button id="Stop">Stop</button>
+        <span id="ApplicationStatus" class="InfStatus"></span>
         <script src="popup.js"></script>
     </body>
 </html>

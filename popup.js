@@ -2,15 +2,10 @@
 const settingsData = () => chrome.storage.sync.get(['BinUpdateInterval', 'CbrUpdateInterval', 'ApplicationStatus', 'CBRUpdateTime', 'BinUpdateTime'], (items) => getSettings(items)) // get app settings from chrome storage
 function getSettings(items){ 
     Object.keys(items).forEach(key => {
-        console.log(items[key])   
-        key !== "ApplicationStatus"
-            ? document.getElementById(key).value = items[key]
-            : document.getElementById(key).innerText = getStatus(items[key])               
+        if(key === 'BinUpdateInterval' || key === 'CbrUpdateInterval') document.getElementById(key).value = items[key]
+        else if(key === 'CBRUpdateTime' || key === 'BinUpdateTime') document.getElementById(key).innerText = items[key]
+        else document.getElementById(key).innerText = items[key] === "Start" ? "Расширение Активно" : "Расширение Остановлено"
     })
-    function getStatus(data){
-        if(data === "Start") return "Расширение Активно"  
-        return "Расширение Остановлено"
-    }
 }
 function messageStartStop(message){ // Send message to Listener in background.js
     chrome.runtime.sendMessage(message, () => {

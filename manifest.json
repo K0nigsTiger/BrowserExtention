@@ -11,10 +11,11 @@
         "activeTab", 
         "scripting", 
         "alarms", 
-        "tabs"],
+        "tabs"
+    ],
     "host_permissions":[
-        "https://www.bestchange.ru/*",
-        "https://www.bestchange.com/*"
+        "https://www.bestchange.ru/",
+        "https://www.bestchange.com/"
     ],    
     "action":{
         "default_popup": "popup.html",

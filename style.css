@@ -1,4 +1,4 @@
-button{
+button, #saveUpdateValues{
     height: 30px;
     width: 50px;
     outline: none;
@@ -6,22 +6,20 @@ button{
     border: none;
     border-radius: 2px;
     cursor:pointer;
+    color:white;
 }
-button.current{
-    box-shadow: 0 0 0 2px white,
-    0 0 0 4px black;
-}
-#BinTime, #CbrTime{
+#BinUpdateTime, #CBRUpdateTime{
     color:blue;
     font-size: 15px;
 }
 #Start{
     background-color: green;
-    color:white;
 }
 #Stop{
-    background-color: rgba(213, 51, 51, 0.583);
-    color:white
+    background-color: rgb(195, 40, 40);   
+}
+#saveUpdateValues{
+    background-color: rgb(14, 86, 144);
 }
 .InfStatus{
     text-decoration:underline;
