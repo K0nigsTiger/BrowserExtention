@@ -29,72 +29,17 @@ const getData = async(url, serviceName) => {
         }
       }
     })
+    chrome.storage.local.set({ BinCourses: binCourses })
     chrome.storage.sync.set({ BinUpdateTime: new Date().toLocaleTimeString() });
   }else if(serviceName === "CBR"){
     fiat.forEach(elem => {
       cbrCourses.push({name: elem, price: json["Valute"][elem].Value }) // сохраняем курс в рублях по данным цб
     })
     cbrCourses.push({name: "RUB", price: 1 })
+    chrome.storage.local.set({CbrCourses: cbrCourses})
     chrome.storage.sync.set({ CBRUpdateTime: new Date().toLocaleTimeString() });
   }
 }
-
-function TableCheck(binCourses, cbrCourses){
-  let startChecker = setInterval(function(){
-    let spanCheck = document.body.querySelector('#content_table tbody span.ExtVal'); // проверка на существующее значение процента
-    if(spanCheck == null){
-      function getCourseBestChange(){
-        let TableContent = document.body.querySelectorAll('#content_table tbody tr[onclick]'); // сбор всех строк из таблицы
-        let course_array = []; // массив объектов с данными из строк таблицы
-        for(let element of TableContent){
-            let courseValues = element.querySelectorAll('td.bi'); // содержит значения из поля отдаете
-            let exchange_info = { // заполнение свойств объекта значениями из таблицы
-                key: element.getAttribute('onclick'), 
-                in_name: courseValues[0].querySelector('div.fs small').innerHTML, 
-                out_name: courseValues[1].querySelector('small').innerHTML,
-                in: parseFloat(courseValues[0].querySelector('div.fs').innerHTML.replaceAll(" ", "")), 
-                out: parseFloat(courseValues[1].innerHTML.replaceAll(" ", "")),
-                percent: null
-            };
-            course_array.push(exchange_info);
-        }         
-        function getCourse(){
-          let inRub, outRub;
-          binCourses.forEach(value => {
-            if(value["name"] == course_array[0].in_name) inRub = parseFloat(value["price"]); // получаем значение курса в рублях отдаваемой валюты           
-            else if(value["name"] == course_array[0].out_name) outRub = parseFloat(value["price"]); // получаем значение курса в рублях получаемой валюты
-            else{
-              if(course_array[0].in_name.startsWith(value["name"])) inRub = parseFloat(value["price"]);
-              if(course_array[0].out_name.startsWith(value["name"])) outRub = parseFloat(value["price"]);
-            }                   
-          })
-          cbrCourses.forEach(value => {
-            if(course_array[0].in_name == value["name"]) inRub = parseFloat(value["price"]);
-            if(course_array[0].out_name == value["name"]) outRub = parseFloat(value["price"]);
-          })
-          return [inRub, outRub]
-        }
-        let [incourse, outcourse] = getCourse()
-        for(let exchange of course_array){
-          let ExchangeRow = document.body.querySelectorAll('#content_table tbody tr[onclick="' + exchange.key + '"] td.bi');            
-          let span_percent = document.createElement('span');
-          incourse > outcourse 
-                    ? exchange.percent = ((exchange.out * 100 / (incourse/outcourse)) - 100).toFixed(2) + "%"
-                    : exchange.percent = (100 - (exchange.in * 100 / (outcourse/incourse))).toFixed(2) + "%"  
-          span_percent.innerText = exchange.percent;
-          span_percent.className = "ExtVal";
-          span_percent.style.cssText = exchange.percent.includes('-') ? 'color:red;' : 'color:green;';
-          if(ExchangeRow[1].querySelector('span') != null){
-              const e = ExchangeRow[1].querySelector('span');
-              e.parentElement.removeChild(e);
-          }
-          ExchangeRow[1].appendChild(span_percent);
-        }  
-      };
-      getCourseBestChange();    
-    } 
-  }, 500);
-};
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.sync.set({ 
@@ -148,12 +93,10 @@ chrome.tabs.onUpdated.addListener(
         if(ApplicationStatus == "Start" && tab.url.toString().endsWith(".html") && tab.status == "complete"){
           chrome.scripting.executeScript({
             target: { tabId: tab.id },
-            function: TableCheck,
-            args: [binCourses, cbrCourses],
+            files: ['injection.js'],
           });            
         }            
       })
     }
   }
 );
-
