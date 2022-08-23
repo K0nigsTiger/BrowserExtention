@@ -25,8 +25,8 @@ function getCourseBestChange(binCourses, cbrCourses){
         if(inRub !== undefined && outRub !== undefined) break  
       }
       cbrCourses.forEach(value => {
-        if(course_array[0].in_name == value["name"]) inRub = parseFloat(value["price"]);
-        if(course_array[0].out_name == value["name"]) outRub = parseFloat(value["price"]);
+        if(course_array[0].in_name.startsWith(value["name"])) inRub = parseFloat(value["price"]);
+        if(course_array[0].out_name.startsWith(value["name"])) outRub = parseFloat(value["price"]);
       })
       return [inRub, outRub]
     }
@@ -37,7 +37,7 @@ function getCourseBestChange(binCourses, cbrCourses){
       incourse > outcourse 
                 ? exchange.percent = ((exchange.out * 100 / (incourse/outcourse)) - 100).toFixed(2) + "%"
                 : exchange.percent = (100 - (exchange.in * 100 / (outcourse/incourse))).toFixed(2) + "%"  
-      span_percent.innerText = exchange.percent;
+      span_percent.innerText = " " + exchange.percent;
       span_percent.className = "ExtVal";
       span_percent.style.cssText = exchange.percent.includes('-') ? 'color:red;' : 'color:green;';
       if(ExchangeRow[1].querySelector('span') != null){
